@@ -1,4 +1,4 @@
-const { Engine, Render, Runner, World, Bodies } = Matter;
+const { Engine, Render, Runner, World, Bodies, Body } = Matter;
 
 const cells = 15;
 const width = 600;
@@ -180,11 +180,30 @@ const goal = Bodies.rectangle(
   unitLength * 0.7,
   { isStatic: true }
 );
-
 World.add(world, goal);
 
 // ball
 
 const ball = Bodies.circle(unitLength / 2, unitLength / 2, unitLength / 4);
-
 World.add(world, ball);
+
+// ball movement
+
+document.addEventListener('keydown', (e) => {
+  const { x, y } = ball.velocity;
+
+  switch (e.keyCode) {
+    case 87:
+      Body.setVelocity(ball, { x, y: y - 5 });
+      break;
+    case 68:
+      Body.setVelocity(ball, { x: x + 5, y });
+      break;
+    case 83:
+      Body.setVelocity(ball, { x, y: y + 5 });
+      break;
+    case 65:
+      Body.setVelocity(ball, { x: x - 5, y });
+      break;
+  }
+});
