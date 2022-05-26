@@ -1,6 +1,6 @@
 const { Engine, Render, Runner, World, Bodies } = Matter;
 
-const cells = 3;
+const cells = 10;
 const width = 600;
 const height = 600;
 
@@ -85,12 +85,12 @@ stepThroughCell = (row, column) => {
   grid[row][column] = true;
 
   // assemble randomly-ordered list of neighbours
-  const neighbours = [
+  const neighbours = shuffle([
     [row - 1, column, 'up'],
     [row, column + 1, 'right'],
     [row + 1, column, 'down'],
     [row, column - 1, 'left'],
-  ];
+  ]);
 
   // for each neighbour
   for (let neighbour of neighbours) {
@@ -111,15 +111,19 @@ stepThroughCell = (row, column) => {
       continue;
     }
 
-    // remove wall from horizontal or vertical array
-    if (direction === 'left') {
-      verticals[row][column - 1] = true;
-    } else if (direction === 'right') {
-      verticals[row][column] = true;
-    } else if (direction === 'up') {
-      horizontals[row - 1][column] = true;
-    } else if (direction === 'down') {
-      horizontals[row][column] = true;
+    switch (direction) {
+      case 'left':
+        verticals[row][column - 1] = true;
+        break;
+      case 'right':
+        verticals[row][column] = true;
+        break;
+      case 'up':
+        horizontals[row - 1][column] = true;
+        break;
+      case 'down':
+        horizontals[row][column] = true;
+        break;
     }
 
     stepThroughCell(nextRow, nextColumn);
@@ -128,7 +132,6 @@ stepThroughCell = (row, column) => {
 };
 
 stepThroughCell(startRow, startColumn);
-console.log(horizontals, verticals);
 
 horizontals.forEach((row, rowIndex) => {
   row.forEach((open, columnIndex) => {
@@ -140,7 +143,7 @@ horizontals.forEach((row, rowIndex) => {
       columnIndex * unitLength + unitLength / 2,
       rowIndex * unitLength + unitLength,
       unitLength,
-      10,
+      5,
       {
         isStatic: true,
       }
@@ -158,7 +161,7 @@ verticals.forEach((row, rowIndex) => {
     const wall = Bodies.rectangle(
       columnIndex * unitLength + unitLength,
       rowIndex * unitLength + unitLength / 2,
-      10,
+      5,
       unitLength,
       {
         isStatic: true,
