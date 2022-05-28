@@ -242,9 +242,17 @@ Events.on(engine, 'collisionStart', (e) => {
       world.gravity.y = 1;
       world.bodies.forEach((body) => {
         if (body.label === 'wall') {
+          const audio = new Audio('audio/jaja.mp3');
+          audio.play();
           Body.setStatic(body, false);
         }
       });
     }
   });
+});
+
+// reload
+
+document.querySelector('#playAgain').addEventListener('click', (e) => {
+  location.reload();
 });
